@@ -6,11 +6,14 @@ interface Props {
   text: string,
   color?: string,
   ancho?: boolean,
+  action: ( textNum: string ) => void,
 }
 
-const ButtonCalc = ({ text, color='#2D2D2D', ancho= false }: Props) => {
+const ButtonCalc = ({ text, color='#2D2D2D', ancho= false, action }: Props) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity
+      onPress={() => action(text)}
+    >
       <View style={{
       ...styles.button,
       backgroundColor: color,
@@ -21,8 +24,7 @@ const ButtonCalc = ({ text, color='#2D2D2D', ancho= false }: Props) => {
         color: (color === '#9B9B9B') ? 'black' : 'white'
       }}>{text}</Text>
     </View>
-    </TouchableOpacity>
-    
+    </TouchableOpacity>    
   )
 }
 
