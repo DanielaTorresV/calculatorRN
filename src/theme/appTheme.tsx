@@ -20,15 +20,19 @@ export const styles = StyleSheet.create({
       fontSize: 30,
       textAlign: 'right'
     },
+    rowButtons: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      marginBottom: 18,
+      paddingHorizontal: 10
+    },
     button: {
       height: 80,
-      width: 80,
-      backgroundColor: '#9B9B9B',
       borderRadius: 100,
-      justifyContent: 'center'
+      justifyContent: 'center',
+      marginHorizontal: 10
     },
     buttonText: {
-      color: 'black',
       fontWeight: '300',
       fontSize: 30,
       padding: 10,
