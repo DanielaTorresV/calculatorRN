@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { styles } from '../theme/appTheme';
 import ButtonCalc from '../components/ButtonCalc';
+
+enum Operadores {
+  add, subtract, multiply, split
+}
 
 const CalculatorScreen = () => {
 
   const [numPrevius, setNumPrevius] = useState('0');
   const [num, setNum] = useState('100');
+  const lastOpe = useRef<Operadores>();
 
   const clean = () => {
     setNum('0');
+    setNumPrevius('0');
   }
 
   const doNum = ( textNum: string ) => {
@@ -50,9 +56,59 @@ const CalculatorScreen = () => {
     }
   }
 
+  const btnDel = () => {
+
+    let neg = '';
+    let numTemp = num;
+    if ( num.includes('-') ) {
+      neg = '-';
+      numTemp = num.substr(1);
+    }
+
+    if (numTemp.length > 1 ) {
+      setNum ( neg + numTemp.slice(0, -1) );
+    } else {
+      setNum ( '0' );
+    }
+  }
+
+  const changeNumPrevius = () => {
+
+    if ( num.endsWith('.') ) {
+      setNumPrevius(num.slice(0, -1) );
+    } else {
+      setNumPrevius(num);
+    }    
+    setNum('0');
+  }
+
+  const btnSplit = () => {
+    changeNumPrevius();
+    lastOpe.current = Operadores.split;
+  }
+
+  const btnMultiply = () => {
+    changeNumPrevius();
+    lastOpe.current = Operadores.multiply;
+  }
+
+  const btnSubtract = () => {
+    changeNumPrevius();
+    lastOpe.current = Operadores.subtract;
+  }
+
+  const btnAdd = () => {
+    changeNumPrevius();
+    lastOpe.current = Operadores.add;
+  }
+
   return (
     <View style={ styles.calculatorContainer } >
-      <Text style={ styles.resultSmall} >{ numPrevius }</Text>
+      {
+        (numPrevius !== '0') && (
+          <Text style={ styles.resultSmall} >{ numPrevius }</Text>
+        )
+      }      
       <Text 
         style={ styles.result}
         numberOfLines= { 1 }
@@ -69,10 +125,10 @@ const CalculatorScreen = () => {
           text='+/-' color='#9B9B9B' action={posNeg}
         />
         <ButtonCalc 
-          text='del' color='#9B9B9B' action={clean}
+          text='del' color='#9B9B9B' action={btnDel}
         />
         <ButtonCalc 
-          text='/' color='#FF9427' action={clean}
+          text='/' color='#FF9427' action={btnSplit}
         />
       </View>
 
@@ -81,7 +137,7 @@ const CalculatorScreen = () => {
         <ButtonCalc text='8' action={ doNum } />
         <ButtonCalc text='9' action={ doNum } />
         <ButtonCalc 
-          text='x' color='#FF9427' action={clean}
+          text='x' color='#FF9427' action={btnMultiply}
         />
       </View>
 
@@ -90,7 +146,7 @@ const CalculatorScreen = () => {
         <ButtonCalc text='5' action={ doNum } />
         <ButtonCalc text='6' action={ doNum } />
         <ButtonCalc 
-          text='-' color='#FF9427' action={clean}
+          text='-' color='#FF9427' action={btnSubtract}
         />
       </View>
 
@@ -99,7 +155,7 @@ const CalculatorScreen = () => {
         <ButtonCalc text='2' action={ doNum } />
         <ButtonCalc text='3' action={ doNum } />
         <ButtonCalc 
-          text='+' color='#FF9427' action={clean}
+          text='+' color='#FF9427' action={btnAdd}
         />
       </View>
 
